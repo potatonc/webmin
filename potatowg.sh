@@ -12,6 +12,7 @@ MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/aldiblues/$MYIP/g";
 
 mkdir -p /var/www/html/wg
+echo "10.10.10.1" > /etc/anc/last-ip
 
 	# Installation
 apt-get update -y
@@ -40,6 +41,11 @@ publickeyserver=$(cat /etc/wireguard/keys/publickey)
 	# value privatekeyserver
 privatekeyserver=$(cat /etc/wireguard/keys/privatekey)
 
+	# last-ip
+	ip="10.10.0."$(expr $(cat /etc/anc/last-ip | tr "." " " | awk '{print $4}') + 1)
+    echo "$ip" > /etc/anc/last-ip
+    addr=$(cat /etc/anc/last-ip)
+
 	# Configuration server
 echo "[Interface]
 PrivateKey = ${privatekeyserver}
@@ -50,12 +56,9 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -
 
 [Peer]
 PublicKey = ${publickeyclient}
-AllowedIPs = 10.10.10.2/32" > /etc/wireguard/wg0.conf
+AllowedIPs = $addr/32" > /etc/wireguard/wg0.conf
 
 	# Configuration client
-	ip="10.10.0."$(expr $(cat /etc/anc/last-ip | tr "." " " | awk '{print $4}') + 1)
-    echo $ip > /etc/anc/last-ip
-    addr=$(cat /etc/anc/last-ip)
 echo "[Interface]
 PrivateKey = ${privatekeyclient}
 Address = $addr/32
