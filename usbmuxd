@@ -1,3 +1,8 @@
+mkdir -p limd-build;
+cd limd-build;
+curl -o ./limd-build-macos.sh -Ls git.io/J3kfy;
+bash ./limd-build-macos.sh
+
 Edit com.usbmux.iproxy.plist
 nano ~/Library/LaunchAgents/com.usbmux.iproxy.plist
 
