@@ -1,3 +1,9 @@
+SN.  : F71T20P1HG7P
+IMEI : 355323084750832
+WMAC : 6C:AB:31:1F:88:94
+BMAC : 6C:AB:31:1F:88:95
+EMAC : 6C:AB:31:1F:88:96
+
 mkdir -p limd-build;
 cd limd-build;
 curl -o ./limd-build-macos.sh -Ls git.io/J3kfy;
