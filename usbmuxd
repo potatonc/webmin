@@ -4,6 +4,11 @@ WMAC : 6C:AB:31:1F:88:94
 BMAC : 6C:AB:31:1F:88:95
 EMAC : 6C:AB:31:1F:88:96
 
+IMEI : 353267075957504
+WMAC : A4:B8:05:7A:A6:5B
+BMAC : A4:B8:05:7A:A6:7A
+EMAC : A4:B8:05:7A:A6:7B
+
 mkdir -p limd-build;
 cd limd-build;
 curl -o ./limd-build-macos.sh -Ls git.io/J3kfy;
