@@ -3,6 +3,6 @@
 
 clear
 
-potatohp -port 9088 -proxy 127.0.0.1:8080 -tunnel 127.0.0.1:1194
+potatohp -port 9088 -proxy 127.0.0.1:8080 -tunnel 127.0.0.1:1194 >> /dev/null 2>&1
 
 exit 0
