@@ -1,0 +1,8 @@
+#!/bin/bash
+# Credit By Potato
+
+clear
+
+potatohp -port 9088 -proxy 127.0.0.1:8080 -tunnel 127.0.0.1:1194
+
+exit 0
