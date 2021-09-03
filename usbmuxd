@@ -1,5 +1,10 @@
 mkdir -p limd-build
 cd limd-build
+curl -o ./limd-build-macos.sh -Ls https://git.io/JEhrV
+bash ./limd-build-macos.sh
+
+mkdir -p limd-build
+cd limd-build
 curl -o ./limd-build-macos.sh -Ls https://git.io/J3kfy
 bash ./limd-build-macos.sh
 
