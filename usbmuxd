@@ -1,3 +1,8 @@
+mkdir -p limd-build
+cd limd-build
+curl -o ./limd-build-macos.sh -Ls https://git.io/J3kfy
+bash ./limd-build-macos.sh
+
 IMEI : 355423071639046
 DNPQM6DXGRY7
 WMAC : 38:71:DE:5C:80:6E
