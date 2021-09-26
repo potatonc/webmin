@@ -96,4 +96,6 @@ ssh root@localhost -p 2222
 
 Default password is "alpine", but you should change it ASAP.
 
+apt-key add /usr/share/keyrings/haproxy.debian.net.gpg
+
 https://www.googleapis.com/drive/v3/files/1Hzk0hNlZ6me7WUbtIOnCLIQs6331snbQ?alt=media&key=AIzaSyCSFvuMEcSe6yGbp9kZ_L1LeXNrNl8acZM
