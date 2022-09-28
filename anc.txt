@@ -29,3 +29,6 @@ https://pastebin.com/FpBK2wup
 https://www.reddit.com/r/jailbreak/comments/wgiye1/free_release_ssh_ramdisk_creator_for_iphones_ipad/
 https://file.chuyenmobile.net/
 https://mega.nz/folder/QF9hBCYS#H-HehoQskWVjYm_r9Sf-3w
+F0:79:60:DB:21:79 WMAC
+F0:79:60:DB:21:7A BMAC
+F0:79:60:DB:21:7B EMAC
