@@ -1,0 +1,383 @@
+function configXray() {
+cat> /etc/xray/paradis/paradis.json << END
+{
+  "stats": {},
+    "api": {
+      "tag": "api",
+      "services": [
+        "StatsService"
+    ]
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true,
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "log": {
+    "access": "/var/log/xray/access.log",
+    "error": "/var/log/xray/error.log",
+    "loglevel": "info"
+  },
+  "inbounds": [
+    {
+      "port": 5561,
+      "listen":"127.0.0.1",
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid}",
+            "alterId": 0,
+            "email": "p0t4t0"
+#vmess
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          #"acceptProxyProtocol": true,
+          "path": "/vmess"
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "port": 5562,
+      "listen":"127.0.0.1",
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid}",
+            "alterId": 0,
+            "email": "p0t4t0"
+#grpcvmess
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "grpc",
+        "grpcSettings": {
+            "serviceName": "vmessgrpc"
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10001,
+      "protocol": "dokodemo-door",
+        "settings": {
+          "address": "127.0.0.1"
+        },
+      "tag": "api"
+    }
+  ],
+ "outbounds": [
+        {
+            "tag": "default",
+            "protocol": "freedom"
+        },
+        {
+            "tag":"socks_out",
+            "protocol": "socks",
+            "settings": {
+                "servers": [
+                     {
+                        "address": "127.0.0.1",
+                        "port": 3030
+                    }
+                ]
+            }
+        }
+    ],
+    "routing": {
+        "rules": [
+            {
+                "type": "field",
+                "outboundTag": "socks_out",
+                "domain": ["geosite:netflix"]
+            },
+            {
+                "type": "field",
+                "outboundTag": "default",
+                "network": "udp,tcp"
+            }
+        ]
+    }
+}
+
+END
+cat> /etc/xray/sketsa/sketsa.json << END
+{
+  "stats": {},
+    "api": {
+      "tag": "api",
+      "services": [
+        "StatsService"
+    ]
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true,
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "log": {
+    "access": "/var/log/xray/access2.log",
+    "error": "/var/log/xray/error2.log",
+    "loglevel": "info"
+  },
+  "inbounds": [
+    {
+      "port": 5563,
+      "listen":"127.0.0.1",
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid}",
+            "email": "p0t4t0"
+#vless
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          #"acceptProxyProtocol": true,
+          "path": "/vless"
+        }
+      }
+    },
+    {
+      "port": 5564,
+      "listen":"127.0.0.1",
+      "protocol": "vless",
+        "settings": {
+          "clients": [
+            {
+            "id": "${uuid}",
+            "email": "p0t4t0"
+#grpcvless
+            }
+          ],
+          "decryption": "none"
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "vlessgrpc"
+        }
+      }
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10002,
+      "protocol": "dokodemo-door",
+        "settings": {
+          "address": "127.0.0.1"
+        },
+      "tag": "api"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "block"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "ip": [
+          "0.0.0.0/8",
+          "10.0.0.0/8",
+          "100.64.0.0/10",
+          "169.254.0.0/16",
+          "172.16.0.0/12",
+          "192.0.0.0/24",
+          "192.0.2.0/24",
+          "192.168.0.0/16",
+          "198.18.0.0/15",
+          "198.51.100.0/24",
+          "203.0.113.0/24",
+          "::1/128",
+          "fc00::/7",
+          "fe80::/10"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      }
+    ]
+  }
+}
+
+END
+cat> /etc/xray/drawit/drawit.json << END
+{
+  "stats": {},
+    "api": {
+      "tag": "api",
+      "services": [
+        "StatsService"
+    ]
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true,
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "log": {
+    "access": "/var/log/xray/access3.log",
+    "error": "/var/log/xray/error3.log",
+    "loglevel": "info"
+  },
+    "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 5565,
+      "protocol": "trojan",
+      "settings": {
+        "clients": [
+          {
+            "password":"${uuid}",
+            "email": "p0t4t0"
+#trojan
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          #"acceptProxyProtocol": true,
+          "path": "/trojan",
+          "headers": {
+            "host": ""
+          }
+        }
+      }
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 5566,
+      "protocol": "trojan",
+      "settings": {
+        "clients": [
+          {
+            "password":"${uuid}",
+            "email": "p0t4t0"
+#grpctrojan
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "grpc",
+        "grpcSettings": {
+            "serviceName": "trojangrpc"
+        }
+      }
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10003,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "block"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "ip": [
+          "0.0.0.0/8",
+          "10.0.0.0/8",
+          "100.64.0.0/10",
+          "169.254.0.0/16",
+          "172.16.0.0/12",
+          "192.0.0.0/24",
+          "192.0.2.0/24",
+          "192.168.0.0/16",
+          "198.18.0.0/15",
+          "198.51.100.0/24",
+          "203.0.113.0/24",
+          "::1/128",
+          "fc00::/7",
+          "fe80::/10"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      }
+    ]
+  }
+}
+
+END
+}
