@@ -1,0 +1,27 @@
+function sshdropbear() {
+# simple password minimal
+wget -O /etc/pam.d/common-password "https://github.com/potatonc/ScriptAutoInstallPotato/raw/master/common/common-password" >> /dev/null 2>&1
+chmod +x /etc/pam.d/common-password
+
+cd /etc/ssh
+rm sshd_config
+wget https://raw.githubusercontent.com/potatonc/ScriptAutoInstallPotato/master/menu/sshd_config
+chmod 777 sshd_config
+service ssh restart
+service sshd restart
+
+# install dropbear
+apt-get -y install dropbear
+echo "/bin/false" >> /etc/shells
+echo "/usr/sbin/nologin" >> /etc/shells
+
+# banner /etc/banner.com
+wget -O /etc/banner.com "https://github.com/potatonc/ScriptAutoInstallPotato/raw/master/banner/banner.com" >> /dev/null 2>&1
+wget -O /etc/default/dropbear "https://raw.githubusercontent.com/potatonc/ScriptAutoInstallPotato/master/menu/dropbear" > /dev/null 2>&1
+
+chmod 777 /etc/default/dropbear
+/etc/init.d/dropbear restart
+service ssh restart
+service sshd restart
+}
+sshdropbear
